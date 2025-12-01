@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
+	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+	<http:listener-config name="customer-dp-exp-api-http-listener-config">
+        <http:listener-connection host="0.0.0.0" port="${httpListener.port}" readTimeout="${httpListener.read-timeout}"/>
+    </http:listener-config>
+    <apikit:config name="customer-dp-exp-api-config" api="customer-dp-exp-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+	<json-logger:config name="json-logger-config" doc:name="JSON Logger Config" doc:id="4e554a87-b020-4f0e-bdc3-a3dfc40e182a" applicationName="${app.name}" applicationVersion="${app.version}" environment="${mule.env}" />
+	<http:request-config name="customer-prc-app-request-config" doc:name="HTTP Request configuration" doc:id="bcb93f26-0523-48bb-bb4a-ac5e9ae246c1" basePath="${httpRequester.customer-prc-api.base-path}" >
+		<http:request-connection host="${httpRequester.customer-prc-api.host}" port="${httpRequester.customer-prc-api.port}" protocol="HTTPS"/>
+	</http:request-config>
+	<http:request-config name="dp-prc-app-request-config" doc:name="HTTP Request configuration" doc:id="c06f82a0-0d57-4ee9-9357-b925996db65b" basePath="${httpRequester.dp-prc-api.base-path}" >
+		<http:request-connection host="${httpRequester.dp-prc-api.host}" port="${httpRequester.dp-prc-api.port}" connectionIdleTimeout="${httpRequester.dp-prc-api.timeout}" protocol="HTTPS"/>
+	</http:request-config>
+	<http:request-config name="order-prc-app-request-config" doc:name="HTTP Request configuration" doc:id="548cd335-c140-4cf9-abd7-0875e0620fd8" basePath="${httpRequester.order-prc-api.base-path}" >
+		<http:request-connection host="${httpRequester.order-prc-api.host}" port="${httpRequester.order-prc-api.port}" connectionIdleTimeout="${httpRequester.order-prc-api.timeout}" protocol="HTTPS"/>
+	</http:request-config>
+	<configuration doc:name="configuration" doc:id="0552d655-aa0d-4fc5-ad35-3cd6f85c8d48" defaultErrorHandler-ref="global-error-handler" />
+	<configuration-properties doc:name="configuration-properties" doc:id="1c5f5f98-fdd3-431d-83ae-111c3b140ffa" file="config/${mule.env}-properties.yaml" />
+	<secure-properties:config name="secure-properties-config" doc:name="secure-properties-config" doc:id="ec59b36d-b101-46d9-9c08-845e64dba307" file="config/${mule.env}-secure-properties.yaml" key="${mule.key}" />
+	<api-gateway:autodiscovery apiId="20627912" ignoreBasePath="true" doc:name="api-autodiscovery" doc:id="d228fb14-f20c-473f-8faa-64657d90d5da" flowRef="customer-dp-exp-api-main" />
+	<error-handler name="global-error-handler" doc:id="b3952295-c33b-4ae4-bc62-4f9f1b1476b1" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="on-error-propagate" doc:id="892d693e-715c-4e13-9c7a-dd7ed6ab7ba0" type="ANY" >
+			<ee:transform doc:name="prepare-error-payload" doc:id="89e89b03-326e-4f0e-8f2a-74dc4e67f8c2" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"errorCode": 500,
+	"errorMessage": error.description,
+	"errorPayloadContent": error.errorMessage.payload,
+	"status":"ERROR",
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<json-logger:logger doc:name="log-global-error" doc:id="41be0ed6-a6b8-447d-98db-3342a80f9019" config-ref="json-logger-config" message='#["-----" ++ upper("log-global-error") ++ "-----"]' tracePoint="EXCEPTION" priority="ERROR" >
+				<json-logger:content ><![CDATA[#[output application/json
+---
+payload]]]></json-logger:content>
+			</json-logger:logger>
+		</on-error-propagate>
+	</error-handler>
+</mule>

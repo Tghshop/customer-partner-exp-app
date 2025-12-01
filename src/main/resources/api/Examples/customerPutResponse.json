@@ -1,0 +1,10 @@
+{
+    "message": "Customer record updated successfully",
+    "customerId": "CUST005",
+    "updatedFields": [
+        {
+            "email": "sidhu.desai@gmail.com"
+        }
+    ],
+    "lastUpdated": "2025-11-26T05:46:50.418882174Z"
+}

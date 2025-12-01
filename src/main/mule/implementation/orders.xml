@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd">
+	<sub-flow name="get-orders-data-sub-flow" doc:id="dbe92ff7-2774-4020-8642-b1ed4786938e">
+		<json-logger:logger doc:name="log-get-orders-data-sub-flow-start" doc:id="244673af-f58d-4639-a486-d85f541a1108" config-ref="json-logger-config" message='#["-------------" ++ upper("log-get-orders-data-sub-flow-start") ++ "---------------"]'>
+			<json-logger:content ><![CDATA[#[payload]]]></json-logger:content>
+		</json-logger:logger>
+		<ee:transform doc:name="req-variable" doc:id="4107848c-1e61-42e2-b629-efcfd491dc03">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="req" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"method": "GET",
+	"path": "/orders"
+}]]></ee:set-variable>
+
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="order-prc-api-call-impl-sub-flow" doc:id="c3cc0a88-c692-45b6-9018-7b924f1d0d30" name="order-prc-api-call-impl-sub-flow"/>
+		<json-logger:logger doc:name="log-get-orders-data-sub-flow-end" doc:id="4cba2496-8f19-46cc-8384-327e28169f29" config-ref="json-logger-config" message='#["-------------" ++ upper("log-get-orders-data-sub-flow-end") ++ "---------------"]' >
+			<json-logger:content ><![CDATA[#[payload]]]></json-logger:content>
+		</json-logger:logger>
+	
+
+</sub-flow>
+	<sub-flow name="get-order-byid-sub-flow" doc:id="495af851-87cf-40e4-9757-05bdc960f50b">
+		<json-logger:logger doc:name="log-get-order-byid-sub-flow-start" doc:id="509e548c-5dcb-43ea-8ce5-b662895a913f" config-ref="json-logger-config" message='#["--------------" ++ upper("log-get-order-byid-sub-flow-start") ++ "----------------"]'>
+			<json-logger:content ><![CDATA[#[payload]]]></json-logger:content>
+		</json-logger:logger>
+		<ee:transform doc:name="req-variable" doc:id="b8dec1b3-4180-45c7-8754-dfbebeddbb73">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="req" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"method": "GET",
+	"path": "/orders/" ++ vars.requestParams.uriParams.orderId as String default ""
+}]]></ee:set-variable>
+
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="order-prc-api-call-impl-sub-flow" doc:id="d5e4115f-b33c-4f5f-878e-596af258c79a" name="order-prc-api-call-impl-sub-flow"/>
+		<json-logger:logger doc:name="log-get-order-byid-sub-flow-end" doc:id="44ba855f-a9a7-426b-a40e-fa7bdf5cc12b" config-ref="json-logger-config" message='#["--------------" ++ upper("log-get-order-byid-sub-flow-end") ++ "----------------"]' >
+			<json-logger:content ><![CDATA[#[payload]]]></json-logger:content>
+		</json-logger:logger>
+	
+</sub-flow>
+	<sub-flow name="post-order-record-sub-flow" doc:id="56648464-b7ed-4837-8e2d-36a1c7e04eff">
+		<json-logger:logger doc:name="log-post-order-record-sub-flow-start" doc:id="ffc30f1b-9db3-456d-a269-5267009b52cc" config-ref="json-logger-config" message='#["----------------" ++ upper("log-post-order-record-sub-flow-start") ++ "-----------------"]'>
+			<json-logger:content ><![CDATA[#[payload]]]></json-logger:content>
+		</json-logger:logger>
+		<ee:transform doc:name="req-variable-payload-prep" doc:id="081e3f31-75b6-486b-a7b7-d4349602d069">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="req" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"method": "POST",
+	"path": "/orders"
+}]]></ee:set-variable>
+
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="order-prc-api-call-impl-sub-flow" doc:id="2eae68fa-547d-4af5-82ec-9615bb3c63a1" name="order-prc-api-call-impl-sub-flow" target="ordResponse"/>
+		<json-logger:logger doc:name="log-post-order-record-sub-flow-end" doc:id="1fb44d33-db1c-4268-a380-40300b40a38f" config-ref="json-logger-config" message='#["----------------" ++ upper("post-order-record-sub-flow-end") ++ "-----------------"]' >
+			<json-logger:content ><![CDATA[#[payload]]]></json-logger:content>
+		</json-logger:logger>
+	
+</sub-flow>
+	<sub-flow name="patch-order-details-sub-flow" doc:id="6568b41c-a61a-4d07-b3d5-93051e3d20b7">
+		<json-logger:logger doc:name="log-patch-order-details-sub-flow-start" doc:id="6a818752-ad75-4022-9de5-f54ea8e16702" config-ref="json-logger-config" message='#["-------------" ++ upper("log-patch-order-details-sub-flow-start") ++ "---------------"]'>
+			<json-logger:content ><![CDATA[#[payload]]]></json-logger:content>
+		</json-logger:logger>
+		<ee:transform doc:name="req-vaiable-payload-prep" doc:id="2923b291-7abc-4225-ae7a-b23a5e62a53e">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="req" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"method": "PATCH",
+	"path": "/orders/" ++ vars.requestParams.uriParams.orderId as String default ""
+}]]></ee:set-variable>
+
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="order-prc-api-call-impl-sub-flow" doc:id="b6785a5c-782d-4508-80ff-a8efee89b2f5" name="order-prc-api-call-impl-sub-flow"/>
+		<json-logger:logger doc:name="log-patch-order-details-sub-flow-end" doc:id="5cde6a00-3867-4d4f-aa92-9b8bf28e652f" config-ref="json-logger-config" message='#["-------------" ++ upper("log-patch-order-details-sub-flow-end") ++ "---------------"]' >
+			<json-logger:content ><![CDATA[#[payload]]]></json-logger:content>
+		</json-logger:logger>
+	
+</sub-flow>
+	<sub-flow name="delete-order-sub-flow" doc:id="28a04038-5998-48af-9fc8-00ec966369d7" >
+		<json-logger:logger doc:name="log-delete-order-sub-flow-start" doc:id="7d39725d-4416-46ac-82c7-f51078f46ba6" config-ref="json-logger-config" message='#["-------------" ++ upper("log-delete-order-sub-flow-start") ++ "---------------"]' >
+			<json-logger:content ><![CDATA[#[payload]]]></json-logger:content>
+		</json-logger:logger>
+		<ee:transform doc:name="req-variable" doc:id="82ebde42-3265-40c2-9c75-986c724a3ff3" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="req" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"method": "DELETE",
+	"path": "/orders/" ++ vars.requestParams.uriParams.orderId as String default ""
+}]]></ee:set-variable>
+
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="order-prc-api-call-impl-sub-flow" doc:id="f230712d-4819-4973-8ad6-e0cb142157df" name="order-prc-api-call-impl-sub-flow" />
+		<json-logger:logger doc:name="log-delete-order-sub-flow-end" doc:id="f1f59470-cade-465a-b2fe-a7a731e7e6ec" config-ref="json-logger-config" message='#["-------------" ++ upper("log-delete-order-sub-flow-end") ++ "---------------"]' >
+			<json-logger:content ><![CDATA[#[payload]]]></json-logger:content>
+		</json-logger:logger>
+	
+</sub-flow>
+</mule>

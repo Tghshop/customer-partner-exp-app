@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<sub-flow name="customer-prc-api-call-impl-sub-flow" doc:id="e6f524c3-aaca-42e3-9c0c-ed5b82d7a591" >
+		<json-logger:logger doc:name="log-customer-prc-app-call-start" doc:id="57d562d7-8717-4a70-a663-88c99e729969" config-ref="json-logger-config" message='#["-------------------" ++ upper("log-customer-prc-app-call-start") ++ "--------------------"]'>
+			<json-logger:content ><![CDATA[#[payload]]]></json-logger:content>
+		</json-logger:logger>
+		<http:request method="#[vars.req.method]" doc:name="req-to-customer-prc-app" doc:id="ba33fff0-c1b2-45cf-b186-265f02097ad8" config-ref="customer-prc-app-request-config" path="#[vars.req.path]"/>
+		<json-logger:logger doc:name="log-customer-prc-app-call-end" doc:id="f941da43-6a7a-4f9e-9e4e-d393d83e0b83" config-ref="json-logger-config" message='#["-------------------" ++ upper("log-customer-prc-app-call-end") ++ "--------------------"]' >
+			<json-logger:content ><![CDATA[#[payload]]]></json-logger:content>
+		</json-logger:logger>
+	</sub-flow>
+	<sub-flow name="delivery-partner-prc-api-call-impl-sub-flow" doc:id="e73b613b-1281-4236-a628-e88254662e4b" >
+		<json-logger:logger doc:name="log-delivery-partner-prc-app-call-start" doc:id="8749e358-97cd-4802-8e80-d9b72d4e66ce" config-ref="json-logger-config" message='#["-------------------" ++ upper("log-delivery-partner-prc-app-call-start") ++ "--------------------"]' >
+			<json-logger:content ><![CDATA[#[payload]]]></json-logger:content>
+		</json-logger:logger>
+		<http:request method="#[vars.req.method]" doc:name="req-to-dp-prc-app" doc:id="5dee6b97-941b-4c00-8da0-8e2256d7b8db" config-ref="dp-prc-app-request-config" path="#[vars.req.path]"/>
+		<json-logger:logger doc:name="log-delivery-partner-prc-app-call-end" doc:id="74c05b93-2121-43d7-b75e-d0eccad6d8f0" config-ref="json-logger-config" message='#["-------------------" ++ upper("log-delivery-partner-prc-app-call-end") ++ "--------------------"]' >
+			<json-logger:content ><![CDATA[#[payload]]]></json-logger:content>
+		</json-logger:logger>
+	</sub-flow>
+	<sub-flow name="order-prc-api-call-impl-sub-flow" doc:id="bc8e69a8-d78b-41b7-8312-19af037f59ac" >
+		<json-logger:logger doc:name="log-order-prc-app-call-start" doc:id="b7931b33-3d9d-4ac1-bcd2-c4cd46d3c590" config-ref="json-logger-config" message='#["-------------------" ++ upper("log-order-prc-app-call-start") ++ "--------------------"]' >
+			<json-logger:content ><![CDATA[#[payload]]]></json-logger:content>
+		</json-logger:logger>
+		<http:request method="#[vars.req.method]" doc:name="req-to-order-prc-app" doc:id="8ce758d9-b7ce-4058-b5b2-8738e53789b4" config-ref="order-prc-app-request-config" path="#[vars.req.path]"/>
+		<json-logger:logger doc:name="log-order-prc-app-call-end" doc:id="20db742e-aaa1-48ab-aa25-1de273c87dcf" config-ref="json-logger-config" message='#["-------------------" ++ upper("log-order-prc-app-call-end") ++ "--------------------"]' >
+			<json-logger:content ><![CDATA[#[payload]]]></json-logger:content>
+		</json-logger:logger>
+	</sub-flow>
+</mule>
