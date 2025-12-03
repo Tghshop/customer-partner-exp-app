@@ -73,7 +73,7 @@ output application/json
 
 			</ee:variables>
 		</ee:transform>
-		<flow-ref doc:name="order-prc-api-call-impl-sub-flow" doc:id="2eae68fa-547d-4af5-82ec-9615bb3c63a1" name="order-prc-api-call-impl-sub-flow" target="ordResponse"/>
+		<flow-ref doc:name="order-prc-api-call-impl-sub-flow" doc:id="2eae68fa-547d-4af5-82ec-9615bb3c63a1" name="order-prc-api-call-impl-sub-flow"/>
 		<json-logger:logger doc:name="log-post-order-record-sub-flow-end" doc:id="1fb44d33-db1c-4268-a380-40300b40a38f" config-ref="json-logger-config" message='#["----------------" ++ upper("post-order-record-sub-flow-end") ++ "-----------------"]' >
 			<json-logger:content ><![CDATA[#[payload]]]></json-logger:content>
 		</json-logger:logger>
