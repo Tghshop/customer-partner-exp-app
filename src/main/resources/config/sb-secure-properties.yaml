@@ -1,0 +1,11 @@
+customer:
+  client_id: "![NDy2vrclcPVx6gfdQsUkAZpyrM/qmEA7AV6/G6PLt/TXua4qtKZMTsW1nONAHUhH]"
+  client_secret: "![ROfc+see2TWbpz/Hp87rusNZmPq4vTRXVRueKchd661uh+cU/zyNJjy/DFpljIhm]"
+  
+order:
+  client_id: "![rABoMTuErWmQMboO3Hg1JL4dVCzzr14j58at/YExqb5ninOadWrHJnVjmjCd1ia/]"
+  client_secret: "![nKir7H1GHu09DWD3ephI/yMNO071Qjruj8Qm9omPc0Dn1TquL8JHBcE/mZX7ZvSB]"
+  
+delivery-partner:
+  client_id: "![L6jQ6kxn5KOkx2RdsRBLjvOR2jhUyj4Ye/Rld6CR/B3nuHocFgdWemKQfwmr8aQk]"
+  client_secret: "![dnJsrHXJaFlfO/aov36SlxPr3YyRZ0NvBoIkRAmf00VG/tjl62qhkg/wt9U39BS2]"

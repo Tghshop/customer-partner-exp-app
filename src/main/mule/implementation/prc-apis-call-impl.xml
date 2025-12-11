@@ -9,7 +9,15 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		<json-logger:logger doc:name="log-customer-prc-app-call-start" doc:id="57d562d7-8717-4a70-a663-88c99e729969" config-ref="json-logger-config" message='#["-------------------" ++ upper("log-customer-prc-app-call-start") ++ "--------------------"]'>
 			<json-logger:content ><![CDATA[#[payload]]]></json-logger:content>
 		</json-logger:logger>
-		<http:request method="#[vars.req.method]" doc:name="req-to-customer-prc-app" doc:id="ba33fff0-c1b2-45cf-b186-265f02097ad8" config-ref="customer-prc-app-request-config" path="#[vars.req.path]"/>
+		<http:request method="#[vars.req.method]" doc:name="req-to-customer-prc-app" doc:id="ba33fff0-c1b2-45cf-b186-265f02097ad8" config-ref="customer-prc-app-request-config" path="#[vars.req.path]">
+			<http:headers ><![CDATA[#[import p from Mule
+output application/java
+---
+{
+	client_id : p("secure::customer.client_id"),
+	client_secret: p("secure::customer.client_secret")
+}]]]></http:headers>
+		</http:request>
 		<json-logger:logger doc:name="log-customer-prc-app-call-end" doc:id="f941da43-6a7a-4f9e-9e4e-d393d83e0b83" config-ref="json-logger-config" message='#["-------------------" ++ upper("log-customer-prc-app-call-end") ++ "--------------------"]' >
 			<json-logger:content ><![CDATA[#[payload]]]></json-logger:content>
 		</json-logger:logger>
@@ -18,7 +26,15 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		<json-logger:logger doc:name="log-delivery-partner-prc-app-call-start" doc:id="8749e358-97cd-4802-8e80-d9b72d4e66ce" config-ref="json-logger-config" message='#["-------------------" ++ upper("log-delivery-partner-prc-app-call-start") ++ "--------------------"]' >
 			<json-logger:content ><![CDATA[#[payload]]]></json-logger:content>
 		</json-logger:logger>
-		<http:request method="#[vars.req.method]" doc:name="req-to-dp-prc-app" doc:id="5dee6b97-941b-4c00-8da0-8e2256d7b8db" config-ref="dp-prc-app-request-config" path="#[vars.req.path]"/>
+		<http:request method="#[vars.req.method]" doc:name="req-to-dp-prc-app" doc:id="5dee6b97-941b-4c00-8da0-8e2256d7b8db" config-ref="dp-prc-app-request-config" path="#[vars.req.path]">
+			<http:headers ><![CDATA[#[import p from Mule
+output application/java
+---
+{
+	client_id : p("secure::delivery-partner.client_id"),
+	client_secret: p("secure::delivery-partner.client_secret")
+}]]]></http:headers>
+		</http:request>
 		<json-logger:logger doc:name="log-delivery-partner-prc-app-call-end" doc:id="74c05b93-2121-43d7-b75e-d0eccad6d8f0" config-ref="json-logger-config" message='#["-------------------" ++ upper("log-delivery-partner-prc-app-call-end") ++ "--------------------"]' >
 			<json-logger:content ><![CDATA[#[payload]]]></json-logger:content>
 		</json-logger:logger>
@@ -27,7 +43,15 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		<json-logger:logger doc:name="log-order-prc-app-call-start" doc:id="b7931b33-3d9d-4ac1-bcd2-c4cd46d3c590" config-ref="json-logger-config" message='#["-------------------" ++ upper("log-order-prc-app-call-start") ++ "--------------------"]' >
 			<json-logger:content ><![CDATA[#[payload]]]></json-logger:content>
 		</json-logger:logger>
-		<http:request method="#[vars.req.method]" doc:name="req-to-order-prc-app" doc:id="8ce758d9-b7ce-4058-b5b2-8738e53789b4" config-ref="order-prc-app-request-config" path="#[vars.req.path]"/>
+		<http:request method="#[vars.req.method]" doc:name="req-to-order-prc-app" doc:id="8ce758d9-b7ce-4058-b5b2-8738e53789b4" config-ref="order-prc-app-request-config" path="#[vars.req.path]">
+			<http:headers ><![CDATA[#[import p from Mule
+output application/java
+---
+{
+	client_id : p("secure::order.client_id"),
+	client_secret: p("secure::order.client_secret")
+}]]]></http:headers>
+		</http:request>
 		<json-logger:logger doc:name="log-order-prc-app-call-end" doc:id="20db742e-aaa1-48ab-aa25-1de273c87dcf" config-ref="json-logger-config" message='#["-------------------" ++ upper("log-order-prc-app-call-end") ++ "--------------------"]' >
 			<json-logger:content ><![CDATA[#[payload]]]></json-logger:content>
 		</json-logger:logger>
